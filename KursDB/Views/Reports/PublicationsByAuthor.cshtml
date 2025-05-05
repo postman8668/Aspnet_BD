@@ -1,0 +1,69 @@
+﻿@using KursDB.Models.ViewModels
+@model List<PublicationByAuthorViewModel>
+
+<h2>Издания, содержащие произведения указанного автора</h2>
+
+<form asp-action="PublicationsByAuthorResult" method="post" onsubmit="return validateForm(this)">
+    <div class="form-group">
+        <label for="authorName">ФИО автора:</label>
+        <input type="text" class="form-control" id="authorName" name="authorName"
+               pattern="[А-Яа-яЁё\s-]+" title="ФИО должно содержать только русские буквы, пробелы и дефисы"
+               maxlength="100" required>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
+
+<script>
+    function validateForm(form) {
+        const authorName = form.authorName.value.trim();
+
+        if (!authorName) {
+            alert('Введите ФИО автора');
+            return false;
+        }
+
+        const nameRegex = /^[А-Яа-яЁё\s-]+$/;
+        if (!nameRegex.test(authorName)) {
+            alert('ФИО автора должно содержать только русские буквы, пробелы и дефисы');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Инвентарный номер</th>
+                <th>Название издания</th>
+                <th>Автор</th>
+                <th>Библиотека</th>
+                <th>Зал</th>
+                <th>Стеллаж</th>
+                <th>Полка</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.InventoryId</td>
+                    <td>@item.PublicationTitle</td>
+                    <td>@item.AuthorName</td>
+                    <td>@item.LibraryName</td>
+                    <td>@item.HallNumber</td>
+                    <td>@item.RackNumber</td>
+                    <td>@item.ShelfNumber</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model != null)
+{
+    <p>Издания с произведениями указанного автора не найдены.</p>
+}

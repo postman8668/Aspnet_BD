@@ -1,0 +1,66 @@
+﻿@using KursDB.Models.ViewModels
+@model List<ReaderWithWorkViewModel>
+
+<h2>Читатели с указанным произведением</h2>
+
+<form asp-action="ReadersWithWorkResult" method="post" onsubmit="return validateForm(this)">
+    <div class="form-group">
+        <label for="workTitle">Название произведения:</label>
+        <input type="text" class="form-control" id="workTitle" name="workTitle"
+               maxlength="200" required>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
+
+<script>
+    function validateForm(form) {
+        const workTitle = form.workTitle.value.trim();
+
+        if (!workTitle) {
+            alert('Введите название произведения');
+            return false;
+        }
+
+        if (workTitle.length > 200) {
+            alert('Название произведения слишком длинное');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">
+        @ViewBag.Message
+    </div>
+}
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ФИО читателя</th>
+                <th>Название издания</th>
+                <th>Название произведения</th>
+                <th>Дата выдачи</th>
+                <th>Срок возврата</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ReaderName</td>
+                    <td>@item.PublicationTitle</td>
+                    <td>@item.WorkTitle</td>
+                    <td>@item.LoanDate.ToShortDateString()</td>
+                    <td>@item.DueDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

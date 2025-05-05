@@ -1,0 +1,37 @@
+﻿@using KursDB.Models.ViewModels
+@model List<EmployeeInHallViewModel>
+
+<h2>Результаты поиска библиотекарей в зале</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ФИО библиотекаря</th>
+                <th>Должность</th>
+                <th>Дата работы</th>
+                <th>Время начала</th>
+                <th>Время окончания</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.EmployeeName</td>
+                    <td>@item.PositionName</td>
+                    <td>@item.WorkDate.ToShortDateString()</td>
+                    <td>@item.StartTime.ToString(@"hh\:mm")</td>
+                    <td>@item.EndTime.ToString(@"hh\:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Библиотекари в указанном зале не найдены.</p>
+}
+
+<a asp-action="EmployeesInHall" class="btn btn-secondary">Назад</a>

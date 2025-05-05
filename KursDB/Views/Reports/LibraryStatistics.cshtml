@@ -1,0 +1,111 @@
+﻿@using KursDB.Models.ViewModels
+@model LibraryStatisticsViewModel
+
+<h2>Отчет о работе библиотеки за месяц</h2>
+
+<form asp-action="LibraryStatisticsResult" method="post" onsubmit="return validateForm(this)">
+    <div class="form-group">
+        <label for="libraryName">Библиотека:</label>
+        <select class="form-control" id="libraryName" name="libraryName" required>
+            <option value="">Выберите библиотеку</option>
+            @foreach (var library in ViewBag.Libraries)
+            {
+                <option value="@library.Name">@library.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="reportMonth">Месяц:</label>
+        <select class="form-control" id="reportMonth" name="reportMonth" required>
+            @for (int i = 1; i <= 12; i++)
+            {
+                <option value="@i" selected="@(i == DateTime.Now.Month)">@i</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="reportYear">Год:</label>
+        <select class="form-control" id="reportYear" name="reportYear" required>
+            @for (int i = DateTime.Now.Year - 5; i <= DateTime.Now.Year; i++)
+            {
+                <option value="@i" selected="@(i == DateTime.Now.Year)">@i</option>
+            }
+        </select>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Сформировать отчет</button>
+</form>
+
+<script>
+    function validateForm(form) {
+        const libraryName = form.libraryName.value;
+        const month = parseInt(form.reportMonth.value);
+        const year = parseInt(form.reportYear.value);
+        const currentYear = new Date().getFullYear();
+
+        if (!libraryName) {
+            alert('Выберите библиотеку');
+            return false;
+        }
+
+        if (month < 1 || month > 12) {
+            alert('Некорректный месяц');
+            return false;
+        }
+
+        if (year < currentYear - 5 || year > currentYear) {
+            alert('Год должен быть в пределах последних 5 лет');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+@if (Model != null)
+{
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3>@Model.LibraryName</h3>
+            <h4>Статистика за @ViewBag.ReportMonth/@ViewBag.ReportYear</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Общее количество читателей</h5>
+                            <p class="card-text display-4">@Model.TotalReaders</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Новых читателей за месяц</h5>
+                            <p class="card-text display-4">@Model.NewReadersThisMonth</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Всего выдач за месяц</h5>
+                            <p class="card-text display-4">@Model.TotalLoansThisMonth</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Просроченных выдач</h5>
+                            <p class="card-text display-4">@Model.OverdueLoans</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

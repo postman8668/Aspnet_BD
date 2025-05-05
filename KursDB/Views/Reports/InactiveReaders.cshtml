@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Поиск неактивных читателей";
+}
+
+<h2>Поиск читателей, не посещавших библиотеку</h2>
+
+<form asp-action="InactiveReadersResult" method="get" onsubmit="return validateForm(this)">
+    <div class="form-group">
+        <label for="monthsInactive">Введите количество месяцев неактивности:</label>
+        <input type="number" class="form-control" id="monthsInactive" name="monthsInactive"
+               required min="1" max="60" title="Введите число от 1 до 60">
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Найти</button>
+</form>
+
+<script>
+    function validateForm(form) {
+        const months = parseInt(form.monthsInactive.value);
+        if (isNaN(months) {
+            alert('Введите корректное число месяцев');
+            return false;
+        }
+
+        if (months < 1 || months > 60) {
+            alert('Количество месяцев должно быть от 1 до 60');
+            return false;
+        }
+        return true;
+    }
+</script>

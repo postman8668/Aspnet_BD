@@ -1,0 +1,97 @@
+﻿@using KursDB.Models.ViewModels
+@model List<ReaderWithWorkInPeriodViewModel>
+
+<h2>Читатели, получавшие издание с произведением в указанный период</h2>
+
+<form asp-action="ReadersWithWorkInPeriodResult" method="post" onsubmit="return validateForm(this)">
+    <div class="form-group">
+        <label for="workTitle">Название произведения:</label>
+        <input type="text" class="form-control" id="workTitle" name="workTitle"
+               maxlength="200" required>
+    </div>
+    <div class="form-group">
+        <label for="startDate">Начальная дата:</label>
+        <input type="date" class="form-control" id="startDate" name="startDate"
+               max="@DateTime.Now.ToString("yyyy-MM-dd")" min="1900-01-01" required>
+    </div>
+    <div class="form-group">
+        <label for="endDate">Конечная дата:</label>
+        <input type="date" class="form-control" id="endDate" name="endDate"
+               max="@DateTime.Now.ToString("yyyy-MM-dd")" min="1900-01-01" required>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
+
+<script>
+    function validateForm(form) {
+        const workTitle = form.workTitle.value.trim();
+        const startDate = new Date(form.startDate.value);
+        const endDate = new Date(form.endDate.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (!workTitle) {
+            alert('Введите название произведения');
+            return false;
+        }
+
+        if (workTitle.length > 200) {
+            alert('Название произведения слишком длинное');
+            return false;
+        }
+
+        if (!form.startDate.value || !form.endDate.value) {
+            alert('Заполните обе даты');
+            return false;
+        }
+
+        if (startDate < new Date(1900, 0, 1) || endDate < new Date(1900, 0, 1)) {
+            alert('Дата не может быть раньше 1900 года');
+            return false;
+        }
+
+        if (startDate > today || endDate > today) {
+            alert('Дата не может быть в будущем');
+            return false;
+        }
+
+        if (startDate > endDate) {
+            alert('Начальная дата не может быть позже конечной');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ФИО читателя</th>
+                <th>Название издания</th>
+                <th>Название произведения</th>
+                <th>Дата выдачи</th>
+                <th>Дата возврата</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ReaderName</td>
+                    <td>@item.PublicationTitle</td>
+                    <td>@item.WorkTitle</td>
+                    <td>@item.LoanDate.ToShortDateString()</td>
+                    <td>@(item.ReturnDate?.ToShortDateString() ?? "Не возвращено")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model != null)
+{
+    <p>Читатели, получавшие указанное произведение в заданный период, не найдены.</p>
+}

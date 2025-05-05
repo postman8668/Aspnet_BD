@@ -1,0 +1,81 @@
+﻿@model KursDB.Models.Hall
+
+@{
+    ViewData["Title"] = "Edit Hall";
+}
+
+<h1>Edit Hall</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" class="needs-validation" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="HallId" />
+
+            <div class="form-group">
+                <label asp-for="LibraryId" class="control-label">Library*</label>
+                <select asp-for="LibraryId" class="form-control" required
+                        asp-items="ViewBag.LibraryId">
+                    <option value="">-- Select Library --</option>
+                </select>
+                <span asp-validation-for="LibraryId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select a library.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HallTypeId" class="control-label">Hall Type*</label>
+                <select asp-for="HallTypeId" class="form-control" required
+                        asp-items="ViewBag.HallTypeId">
+                    <option value="">-- Select Hall Type --</option>
+                </select>
+                <span asp-validation-for="HallTypeId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select a hall type.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HallNumber" class="control-label">Hall Number*</label>
+                <input asp-for="HallNumber" class="form-control" required
+                       min="1" max="1000" />
+                <span asp-validation-for="HallNumber" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide a valid hall number (1-1000).</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Capacity" class="control-label">Capacity</label>
+                <input asp-for="Capacity" class="form-control"
+                       min="1" max="1000" />
+                <span asp-validation-for="Capacity" class="text-danger"></span>
+                <small class="form-text text-muted">Number between 1 and 1000</small>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Client-side validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+}

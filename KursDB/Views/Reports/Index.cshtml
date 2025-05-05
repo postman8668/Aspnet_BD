@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "Отчеты";
+}
+
+<h2>Система отчетов библиотеки</h2>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5>Отчеты по читателям</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a asp-action="ReadersByAttributes">Читатели с заданными характеристиками</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="ReadersWithWork">Читатели с указанным произведением</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="ReadersWithPublication">Читатели с указанным изданием</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="ReadersWithWorkInPeriod">Читатели с произведением за период</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="ReaderLoansFromHomeLibrary">Выдачи из своей библиотеки</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="ReaderLoansFromOtherLibraries">Выдачи из других библиотек</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="InactiveReaders">Неактивные читатели</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="OverdueLoans">Просроченные выдачи</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5>Отчеты по сотрудникам</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a asp-action="ReadersServedByEmployee">Обслуженные читатели</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="EmployeePerformance">Выработка библиотекарей</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="EmployeesInHall">Библиотекари в читальном зале</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5>Отчеты по фонду</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a asp-action="LoansFromShelf">Литература с полки</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="AcquiredOrWrittenOffPublications">Поступления/списания</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="PublicationsWithWork">Издания с произведением</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="PublicationsByAuthor">Издания по автору</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="PopularPublications">Популярные произведения</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="AuthorBooksInReadingRoom">Книги автора в читальном зале</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a asp-action="LibraryStatistics">Статистика библиотеки</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

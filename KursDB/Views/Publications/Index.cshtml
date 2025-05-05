@@ -1,0 +1,56 @@
+﻿@model IEnumerable<KursDB.Models.Publication>
+
+@{
+    ViewData["Title"] = "Издания";
+}
+
+<h1>Издания</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table id="publicationTable" class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.Publisher)</th>
+            <th>@Html.DisplayNameFor(model => model.PublicationYear)</th>
+            <th>@Html.DisplayNameFor(model => model.Isbn)</th>
+            <th>@Html.DisplayNameFor(model => model.Pages)</th>
+            <th>@Html.DisplayNameFor(model => model.Description)</th>
+            <th>@Html.DisplayNameFor(model => model.PublicationType)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.Publisher)</td>
+                <td>@Html.DisplayFor(modelItem => item.PublicationYear)</td>
+                <td>@Html.DisplayFor(modelItem => item.Isbn)</td>
+                <td>@Html.DisplayFor(modelItem => item.Pages)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => item.PublicationType.TypeName)</td>
+                <td>
+                    <div style="white-space: nowrap">
+                    <a asp-action="Edit" asp-route-id="@item.PublicationId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.PublicationId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.PublicationId">Delete</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#publicationTable').DataTable();
+        });
+    </script>
+}

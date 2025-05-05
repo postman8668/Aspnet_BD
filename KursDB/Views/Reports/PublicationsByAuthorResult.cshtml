@@ -1,0 +1,41 @@
+﻿@using KursDB.Models.ViewModels
+@model List<PublicationByAuthorViewModel>
+
+<h2>Результаты поиска изданий по автору</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Инвентарный номер</th>
+                <th>Название издания</th>
+                <th>Автор</th>
+                <th>Библиотека</th>
+                <th>Зал</th>
+                <th>Стеллаж</th>
+                <th>Полка</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.InventoryId</td>
+                    <td>@item.PublicationTitle</td>
+                    <td>@item.AuthorName</td>
+                    <td>@item.LibraryName</td>
+                    <td>@item.HallNumber</td>
+                    <td>@item.RackNumber</td>
+                    <td>@item.ShelfNumber</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Издания с произведениями указанного автора не найдены.</p>
+}
+
+<a asp-action="PublicationsByAuthor" class="btn btn-secondary">Назад</a>

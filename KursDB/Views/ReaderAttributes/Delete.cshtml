@@ -1,0 +1,42 @@
+﻿@model KursDB.Models.ReaderAttribute
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div class="alert alert-warning" role="alert">
+    <strong>Warning:</strong> Deleting this reader attribute record will permanently remove all associated data. This action cannot be undone.
+</div>
+<div>
+    <h4>ReaderAttribute</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AttributeName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AttributeName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AttributeValue)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AttributeValue)
+        </dd>
+        <dt class="col-sm-2">
+            Reader
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Reader.LastName)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="AttributeId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

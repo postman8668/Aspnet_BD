@@ -1,0 +1,88 @@
+﻿@using KursDB.Models.ViewModels
+@model List<AcquiredOrWrittenOffViewModel>
+
+<h2>Литература, поступившая или списанная в указанный период</h2>
+
+<form asp-action="AcquiredOrWrittenOffPublicationsResult" method="post" onsubmit="return validateDates(this)">
+    <div class="form-group">
+        <label for="startDate">Начальная дата:</label>
+        <input type="date" class="form-control" id="startDate" name="startDate"
+               max="@DateTime.Now.ToString("yyyy-MM-dd")" min="1900-01-01" required>
+    </div>
+    <div class="form-group">
+        <label for="endDate">Конечная дата:</label>
+        <input type="date" class="form-control" id="endDate" name="endDate"
+               max="@DateTime.Now.ToString("yyyy-MM-dd")" min="1900-01-01" required>
+    </div>
+    <div class="form-group">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="isAcquisition" id="acquisition" value="true" checked>
+            <label class="form-check-label" for="acquisition">
+                Поступления
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="isAcquisition" id="writeOff" value="false">
+            <label class="form-check-label" for="writeOff">
+                Списания
+            </label>
+        </div>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
+
+<script>
+    function validateDates(form) {
+        const startDate = new Date(form.startDate.value);
+        const endDate = new Date(form.endDate.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (startDate < new Date(1900, 0, 1) || endDate < new Date(1900, 0, 1)) {
+            alert('Дата не может быть раньше 1900 года');
+            return false;
+        }
+
+        if (startDate > today || endDate > today) {
+            alert('Дата не может быть в будущем');
+            return false;
+        }
+
+        if (startDate > endDate) {
+            alert('Начальная дата не может быть позже конечной');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название издания</th>
+                <th>Тип издания</th>
+                <th>Дата @(ViewBag.IsAcquisition ? "поступления" : "списания")</th>
+                <th>Библиотека</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.PublicationTitle</td>
+                    <td>@item.PublicationType</td>
+                    <td>@item.Date.ToShortDateString()</td>
+                    <td>@item.LibraryName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model != null)
+{
+    <p>@(ViewBag.IsAcquisition ? "Поступления" : "Списания") в указанный период не найдены.</p>
+}

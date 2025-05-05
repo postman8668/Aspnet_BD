@@ -1,0 +1,122 @@
+﻿@model KursDB.Models.Reader
+
+@{
+    ViewData["Title"] = "Edit Reader";
+}
+
+<h1>Edit Reader</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" class="needs-validation" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ReaderId" />
+
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label">Last Name*</label>
+                <input asp-for="LastName" class="form-control" required maxlength="50" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide a last name (max 50 characters).</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label">First Name*</label>
+                <input asp-for="FirstName" class="form-control" required maxlength="50" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide a first name (max 50 characters).</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MiddleName" class="control-label">Middle Name</label>
+                <input asp-for="MiddleName" class="form-control" maxlength="50" />
+                <span asp-validation-for="MiddleName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="BirthDate" class="control-label">Birth Date</label>
+                <input asp-for="BirthDate" class="form-control" type="date"
+                       max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                <small class="form-text text-muted">Must be in the past</small>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address" class="control-label">Address</label>
+                <input asp-for="Address" class="form-control" maxlength="200" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label">Phone</label>
+                <input asp-for="Phone" class="form-control" maxlength="20"
+                       pattern="^\+?[0-9\s\-\(\)]{7,20}$" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+                <small class="form-text text-muted">Format: +79161234567 or 89161234567</small>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email</label>
+                <input asp-for="Email" class="form-control" type="email" maxlength="50" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+                <small class="form-text text-muted">Format: user@example.com</small>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="RegistrationDate" class="control-label">Registration Date*</label>
+                <input asp-for="RegistrationDate" class="form-control" type="date" required
+                       max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="RegistrationDate" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide a valid registration date (not in the future).</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LibraryId" class="control-label">Library*</label>
+                <select asp-for="LibraryId" class="form-control" required
+                        asp-items="ViewBag.Libraries">
+                    <option value="">-- Select Library --</option>
+                </select>
+                <span asp-validation-for="LibraryId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select a library.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ReaderTypeId" class="control-label">Reader Type*</label>
+                <select asp-for="ReaderTypeId" class="form-control" required
+                        asp-items="ViewBag.ReaderTypes">
+                    <option value="">-- Select Reader Type --</option>
+                </select>
+                <span asp-validation-for="ReaderTypeId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select a reader type.</div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Client-side validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+}

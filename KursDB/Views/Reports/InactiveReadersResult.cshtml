@@ -1,0 +1,39 @@
+﻿@model List<KursDB.Models.ViewModels.InactiveReaderViewModel>
+@{
+    ViewData["Title"] = "Результаты поиска неактивных читателей";
+}
+
+<h2>Результаты поиска</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ФИО читателя</th>
+                <th>Тип читателя</th>
+                <th>Дата регистрации</th>
+                <th>Последняя выдача</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ReaderName</td>
+                    <td>@item.ReaderType</td>
+                    <td>@item.RegistrationDate.ToShortDateString()</td>
+                    <td>@(item.LastLoanDate?.ToShortDateString() ?? "Нет выдач")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">Читатели, не посещавшие библиотеку указанное количество месяцев, не найдены.</div>
+}
+
+<div>
+    <a asp-action="InactiveReaders" class="btn btn-secondary">Вернуться к поиску</a>
+</div>

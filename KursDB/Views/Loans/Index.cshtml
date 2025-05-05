@@ -1,0 +1,53 @@
+﻿@model IEnumerable<KursDB.Models.Loan>
+
+@{
+    ViewData["Title"] = "Выдачи";
+}
+
+<h1>Выдачи</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table id="loanTable" class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.LoanDate)</th>
+            <th>@Html.DisplayNameFor(model => model.DueDate)</th>
+            <th>@Html.DisplayNameFor(model => model.ReturnDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Employee)</th>
+            <th>@Html.DisplayNameFor(model => model.Inventory)</th>
+            <th>@Html.DisplayNameFor(model => model.Reader)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.LoanDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.DueDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.ReturnDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Employee.LastName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Inventory.Publication.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.Reader.LastName)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.LoanId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.LoanId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.LoanId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#loanTable').DataTable();
+        });
+    </script>
+}

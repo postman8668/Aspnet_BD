@@ -1,0 +1,31 @@
+﻿@using KursDB.Models.ViewModels
+@model List<PopularPublicationViewModel>
+
+<h2>Самые популярные произведения</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название произведения</th>
+                <th>Автор</th>
+                <th>Количество выдач</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.WorkTitle</td>
+                    <td>@item.AuthorName</td>
+                    <td>@item.LoanCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Данные о популярных произведениях не найдены.</p>
+}

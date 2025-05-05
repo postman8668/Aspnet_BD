@@ -1,0 +1,35 @@
+﻿@using KursDB.Models.ViewModels
+@model List<ReaderWithPublicationViewModel>
+
+<h2>Результаты поиска читателей с изданием</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ФИО читателя</th>
+                <th>Название издания</th>
+                <th>Дата выдачи</th>
+                <th>Срок возврата</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ReaderName</td>
+                    <td>@item.PublicationTitle</td>
+                    <td>@item.LoanDate.ToShortDateString()</td>
+                    <td>@item.DueDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Читатели с указанным изданием не найдены.</p>
+}
+
+<a asp-action="ReadersWithPublication" class="btn btn-secondary">Назад</a>

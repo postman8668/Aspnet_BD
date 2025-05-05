@@ -1,0 +1,77 @@
+﻿@using KursDB.Models.ViewModels
+@model List<ReaderDetailViewModel>
+
+<h2>Читатели с заданными характеристиками</h2>
+
+<form asp-action="ReadersByAttributesResult" method="post" onsubmit="return validateForm(this)">
+    <div class="form-group">
+        <label for="attributeName">Название атрибута:</label>
+        <input type="text" class="form-control" id="attributeName" name="attributeName"
+               maxlength="100" required>
+    </div>
+    <div class="form-group">
+        <label for="attributeValue">Значение атрибута:</label>
+        <input type="text" class="form-control" id="attributeValue" name="attributeValue"
+               maxlength="100" required>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
+
+<script>
+    function validateForm(form) {
+        const attributeName = form.attributeName.value.trim();
+        const attributeValue = form.attributeValue.value.trim();
+
+        if (!attributeName) {
+            alert('Введите название атрибута');
+            return false;
+        }
+
+        if (!attributeValue) {
+            alert('Введите значение атрибута');
+            return false;
+        }
+
+        if (attributeName.length > 100) {
+            alert('Название атрибута слишком длинное');
+            return false;
+        }
+
+        if (attributeValue.length > 100) {
+            alert('Значение атрибута слишком длинное');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>Тип читателя</th>
+                <th>Библиотека</th>
+                <th>Атрибут</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reader in Model)
+            {
+                <tr>
+                    <td>@reader.FullName</td>
+                    <td>@reader.ReaderType</td>
+                    <td>@reader.LibraryName</td>
+                    <td>@reader.Attribute</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model != null)
+{
+    <p>Читатели с указанными характеристиками не найдены.</p>
+}

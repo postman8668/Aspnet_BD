@@ -1,0 +1,47 @@
+﻿@using KursDB.Models.ViewModels
+@model List<AuthorBooksInReadingRoomViewModel>
+
+<h2>Результаты поиска книг автора в читальном зале</h2>
+
+@if (Model != null && Model.Any())
+{
+    <br />
+    <div class="mb-3">
+        <a href="@Url.Action("DownloadAuthorBooksPdf", new { 
+            authorName = ViewBag.AuthorName, 
+            libraryName = ViewBag.LibraryName 
+        })" class="btn btn-primary">
+            Скачать PDF
+        </a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Автор</th>
+                <th>Название издания</th>
+                <th>Библиотека</th>
+                <th>Зал</th>
+                <th>Доступно экземпляров</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.AuthorName</td>
+                    <td>@item.PublicationTitle</td>
+                    <td>@item.LibraryName</td>
+                    <td>@item.HallNumber</td>
+                    <td>@item.AvailableCopies</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Книги указанного автора в читальном зале не найдены.</p>
+}
+
+<a asp-action="AuthorBooksInReadingRoom" class="btn btn-secondary">Назад</a>

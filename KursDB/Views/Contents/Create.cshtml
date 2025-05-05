@@ -1,0 +1,103 @@
+﻿@model KursDB.Models.Content
+
+@{
+    ViewData["Title"] = "Create Content";
+}
+
+<h1>Create Content</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" class="needs-validation" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="PublicationId" class="control-label">Publication*</label>
+                <select asp-for="PublicationId" class="form-control" required
+                        asp-items="ViewBag.PublicationId">
+                    <option value="">-- Select Publication --</option>
+                </select>
+                <span asp-validation-for="PublicationId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select a publication.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="WorkId" class="control-label">Work*</label>
+                <select asp-for="WorkId" class="form-control" required
+                        asp-items="ViewBag.WorkId">
+                    <option value="">-- Select Work --</option>
+                </select>
+                <span asp-validation-for="WorkId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select a work.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PageStart" class="control-label">Start Page</label>
+                <input asp-for="PageStart" class="form-control" min="1" />
+                <span asp-validation-for="PageStart" class="text-danger"></span>
+                <small class="form-text text-muted">Must be positive number</small>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PageEnd" class="control-label">End Page</label>
+                <input asp-for="PageEnd" class="form-control" min="1" />
+                <span asp-validation-for="PageEnd" class="text-danger"></span>
+                <small class="form-text text-muted">Must be positive number</small>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Client-side validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+        // Page validation
+        document.getElementById('PageStart').addEventListener('change', function() {
+            var startPage = parseInt(this.value);
+            var endPageInput = document.getElementById('PageEnd');
+            var endPage = parseInt(endPageInput.value);
+
+            if (startPage && endPage && endPage < startPage) {
+                endPageInput.setCustomValidity('End page must be after start page');
+            } else {
+                endPageInput.setCustomValidity('');
+            }
+        });
+
+        document.getElementById('PageEnd').addEventListener('change', function() {
+            var endPage = parseInt(this.value);
+            var startPageInput = document.getElementById('PageStart');
+            var startPage = parseInt(startPageInput.value);
+
+            if (startPage && endPage && endPage < startPage) {
+                this.setCustomValidity('End page must be after start page');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    </script>
+}

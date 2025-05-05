@@ -1,0 +1,41 @@
+﻿@using KursDB.Models.ViewModels
+@model List<PublicationWithWorkViewModel>
+
+<h2>Результаты поиска изданий с произведением</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Инвентарный номер</th>
+                <th>Название издания</th>
+                <th>Название произведения</th>
+                <th>Библиотека</th>
+                <th>Зал</th>
+                <th>Стеллаж</th>
+                <th>Полка</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.InventoryID</td>
+                    <td>@item.PublicationTitle</td>
+                    <td>@item.WorkTitle</td>
+                    <td>@item.LibraryName</td>
+                    <td>@item.HallNumber</td>
+                    <td>@item.RackNumber</td>
+                    <td>@item.ShelfNumber</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Издания с указанным произведением не найдены.</p>
+}
+
+<a asp-action="PublicationsWithWork" class="btn btn-secondary">Назад</a>

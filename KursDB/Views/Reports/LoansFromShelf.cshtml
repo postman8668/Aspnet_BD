@@ -1,0 +1,93 @@
+﻿@using KursDB.Models.ViewModels
+@model List<LoanFromShelfViewModel>
+
+<h2>Литература, выданная с определенной полки</h2>
+
+<form asp-action="LoansFromShelfResult" method="post" onsubmit="return validateForm(this)">
+    <div class="form-group">
+        <label for="libraryName">Библиотека:</label>
+        <select class="form-control" id="libraryName" name="libraryName" required>
+            <option value="">Выберите библиотеку</option>
+            @foreach (var library in ViewBag.Libraries)
+            {
+                <option value="@library.Name">@library.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="rackNumber">Номер стеллажа:</label>
+        <input type="number" class="form-control" id="rackNumber" name="rackNumber"
+               required min="1" max="100">
+    </div>
+    <div class="form-group">
+        <label for="shelfNumber">Номер полки:</label>
+        <input type="number" class="form-control" id="shelfNumber" name="shelfNumber"
+               required min="1" max="20">
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
+
+<script>
+    function validateForm(form) {
+        const libraryName = form.libraryName.value;
+        const rackNumber = parseInt(form.rackNumber.value);
+        const shelfNumber = parseInt(form.shelfNumber.value);
+
+        if (!libraryName) {
+            alert('Выберите библиотеку');
+            return false;
+        }
+
+        if (isNaN(rackNumber) {
+            alert('Введите корректный номер стеллажа');
+            return false;
+        }
+
+        if (rackNumber < 1 || rackNumber > 100) {
+            alert('Номер стеллажа должен быть от 1 до 100');
+            return false;
+        }
+
+        if (isNaN(shelfNumber)) {
+            alert('Введите корректный номер полки');
+            return false;
+        }
+
+        if (shelfNumber < 1 || shelfNumber > 20) {
+            alert('Номер полки должен быть от 1 до 20');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название издания</th>
+                <th>ФИО читателя</th>
+                <th>Дата выдачи</th>
+                <th>Срок возврата</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.PublicationTitle</td>
+                    <td>@item.ReaderName</td>
+                    <td>@item.LoanDate.ToShortDateString()</td>
+                    <td>@item.DueDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model != null)
+{
+    <p>Выдачи с указанной полки не найдены.</p>
+}

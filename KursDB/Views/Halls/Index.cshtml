@@ -1,0 +1,49 @@
+﻿@model IEnumerable<KursDB.Models.Hall>
+
+@{
+    ViewData["Title"] = "Залы";
+}
+
+<h1>Залы</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table id="hallTable" class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.HallNumber)</th>
+            <th>@Html.DisplayNameFor(model => model.Capacity)</th>
+            <th>@Html.DisplayNameFor(model => model.HallType)</th>
+            <th>@Html.DisplayNameFor(model => model.Library)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.HallNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.Capacity)</td>
+                <td>@Html.DisplayFor(modelItem => item.HallType.TypeName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Library.Name)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.HallId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.HallId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.HallId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#hallTable').DataTable();
+        });
+    </script>
+}

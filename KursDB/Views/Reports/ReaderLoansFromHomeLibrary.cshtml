@@ -1,0 +1,99 @@
+﻿@using KursDB.Models.ViewModels
+@model List<ReaderLoansViewModel>
+
+<h2>Издания, которые получал читатель из своей библиотеки</h2>
+
+<form asp-action="ReaderLoansFromHomeLibraryResult" method="post" onsubmit="return validateForm(this)">
+    <div class="form-group">
+        <label for="readerName">ФИО читателя:</label>
+        <input type="text" class="form-control" id="readerName" name="readerName"
+               pattern="[А-Яа-яЁё\s-]+" title="ФИО должно содержать только русские буквы, пробелы и дефисы"
+               maxlength="100" required>
+    </div>
+    <div class="form-group">
+        <label for="startDate">Начальная дата:</label>
+        <input type="date" class="form-control" id="startDate" name="startDate"
+               max="@DateTime.Now.ToString("yyyy-MM-dd")" min="1900-01-01" required>
+    </div>
+    <div class="form-group">
+        <label for="endDate">Конечная дата:</label>
+        <input type="date" class="form-control" id="endDate" name="endDate"
+               max="@DateTime.Now.ToString("yyyy-MM-dd")" min="1900-01-01" required>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
+
+<script>
+    function validateForm(form) {
+        const readerName = form.readerName.value.trim();
+        const startDate = new Date(form.startDate.value);
+        const endDate = new Date(form.endDate.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (!readerName) {
+            alert('Введите ФИО читателя');
+            return false;
+        }
+
+        const nameRegex = /^[А-Яа-яЁё\s-]+$/;
+        if (!nameRegex.test(readerName)) {
+            alert('ФИО должно содержать только русские буквы, пробелы и дефисы');
+            return false;
+        }
+
+        if (!form.startDate.value || !form.endDate.value) {
+            alert('Заполните обе даты');
+            return false;
+        }
+
+        if (startDate < new Date(1900, 0, 1) || endDate < new Date(1900, 0, 1)) {
+            alert('Дата не может быть раньше 1900 года');
+            return false;
+        }
+
+        if (startDate > today || endDate > today) {
+            alert('Дата не может быть в будущем');
+            return false;
+        }
+
+        if (startDate > endDate) {
+            alert('Начальная дата не может быть позже конечной');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название издания</th>
+                <th>Тип издания</th>
+                <th>Дата выдачи</th>
+                <th>Дата возврата</th>
+                <th>Библиотека</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.PublicationTitle</td>
+                    <td>@item.PublicationType</td>
+                    <td>@item.LoanDate.ToShortDateString()</td>
+                    <td>@(item.ReturnDate?.ToShortDateString() ?? "Не возвращено")</td>
+                    <td>@item.LibraryName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model != null)
+{
+    <p>Выдачи читателя из его библиотеки не найдены.</p>
+}

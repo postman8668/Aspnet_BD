@@ -1,0 +1,61 @@
+﻿@using KursDB.Models.ViewModels
+@model List<ReaderWithPublicationViewModel>
+
+<h2>Читатели с указанным изданием</h2>
+
+<form asp-action="ReadersWithPublicationResult" method="post" onsubmit="return validateForm(this)">
+    <div class="form-group">
+        <label for="publicationTitle">Название издания:</label>
+        <input type="text" class="form-control" id="publicationTitle" name="publicationTitle"
+               maxlength="200" required>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
+
+<script>
+    function validateForm(form) {
+        const publicationTitle = form.publicationTitle.value.trim();
+
+        if (!publicationTitle) {
+            alert('Введите название издания');
+            return false;
+        }
+
+        if (publicationTitle.length > 200) {
+            alert('Название издания слишком длинное');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ФИО читателя</th>
+                <th>Название издания</th>
+                <th>Дата выдачи</th>
+                <th>Срок возврата</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ReaderName</td>
+                    <td>@item.PublicationTitle</td>
+                    <td>@item.LoanDate.ToShortDateString()</td>
+                    <td>@item.DueDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model != null)
+{
+    <p>Читатели с указанным изданием не найдены.</p>
+}

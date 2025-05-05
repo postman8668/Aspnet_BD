@@ -1,0 +1,53 @@
+﻿@model IEnumerable<KursDB.Models.Content>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Содержание</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table id="contentTable" class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.PageStart)</th>
+            <th>@Html.DisplayNameFor(model => model.PageEnd)</th>
+            <th>@Html.DisplayNameFor(model => model.Publication)</th>
+            <th>@Html.DisplayNameFor(model => model.Work)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.PageStart)</td>
+                <td>@Html.DisplayFor(modelItem => item.PageEnd)</td>
+                <td>@Html.DisplayFor(modelItem => item.Publication.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.Work.Title)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ContentId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ContentId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ContentId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#contentTable').DataTable({
+                "searching": true,
+                "ordering": true,
+                "paging": true
+            });
+        });
+    </script>
+}

@@ -1,0 +1,73 @@
+﻿@model KursDB.Models.Library
+
+@{
+    ViewData["Title"] = "Create Library";
+}
+
+<h1>Create Library</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" class="needs-validation" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Name*</label>
+                <input asp-for="Name" class="form-control" required maxlength="100" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide a name (max 100 characters).</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address" class="control-label">Address*</label>
+                <input asp-for="Address" class="form-control" required maxlength="200" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide an address (max 200 characters).</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label">Phone</label>
+                <input asp-for="Phone" class="form-control" maxlength="20"
+                       pattern="^\+?[0-9\s\-\(\)]{7,20}$" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+                <small class="form-text text-muted">Format: +79161234567 or 89161234567</small>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email</label>
+                <input asp-for="Email" class="form-control" type="email" maxlength="50" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+                <small class="form-text text-muted">Format: user@example.com</small>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Client-side validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+}

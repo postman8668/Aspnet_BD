@@ -1,0 +1,67 @@
+﻿@using KursDB.Models.ViewModels
+@model List<PublicationWithWorkViewModel>
+
+<h2>Издания, содержащие указанное произведение</h2>
+
+<form asp-action="PublicationsWithWorkResult" method="post" onsubmit="return validateForm(this)">
+    <div class="form-group">
+        <label for="workTitle">Название произведения:</label>
+        <input type="text" class="form-control" id="workTitle" name="workTitle"
+               maxlength="200" required>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
+
+<script>
+    function validateForm(form) {
+        const workTitle = form.workTitle.value.trim();
+
+        if (!workTitle) {
+            alert('Введите название произведения');
+            return false;
+        }
+
+        if (workTitle.length > 200) {
+            alert('Название произведения слишком длинное');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Инвентарный номер</th>
+                <th>Название издания</th>
+                <th>Название произведения</th>
+                <th>Библиотека</th>
+                <th>Зал</th>
+                <th>Стеллаж</th>
+                <th>Полка</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.InventoryID</td>
+                    <td>@item.PublicationTitle</td>
+                    <td>@item.WorkTitle</td>
+                    <td>@item.LibraryName</td>
+                    <td>@item.HallNumber</td>
+                    <td>@item.RackNumber</td>
+                    <td>@item.ShelfNumber</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model != null)
+{
+    <p>Издания с указанным произведением не найдены.</p>
+}

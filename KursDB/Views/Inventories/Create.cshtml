@@ -1,0 +1,169 @@
+﻿@model KursDB.Models.Inventory
+
+@{
+    ViewData["Title"] = "Create Inventory Item";
+}
+
+<h1>Create Inventory Item</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" class="needs-validation" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="PublicationId" class="control-label">Publication*</label>
+                <select asp-for="PublicationId" class="form-control" required
+                        asp-items="ViewBag.Publications">
+                    <option value="">-- Select Publication --</option>
+                </select>
+                <span asp-validation-for="PublicationId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select a publication.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LibraryId" class="control-label">Library*</label>
+                <select asp-for="LibraryId" class="form-control" required
+                        asp-items="ViewBag.Libraries">
+                    <option value="">-- Select Library --</option>
+                </select>
+                <span asp-validation-for="LibraryId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select a library.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HallId" class="control-label">Hall*</label>
+                <select asp-for="HallId" class="form-control" required
+                        asp-items="ViewBag.Halls">
+                    <option value="">-- Select Hall --</option>
+                </select>
+                <span asp-validation-for="HallId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select a hall.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ShelfNumber" class="control-label">Shelf Number*</label>
+                <input asp-for="ShelfNumber" class="form-control" required min="1" max="1000" />
+                <span asp-validation-for="ShelfNumber" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide a valid shelf number (1-1000).</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="RackNumber" class="control-label">Rack Number*</label>
+                <input asp-for="RackNumber" class="form-control" required min="1" max="1000" />
+                <span asp-validation-for="RackNumber" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide a valid rack number (1-1000).</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AcquisitionDate" class="control-label">Acquisition Date*</label>
+                <input asp-for="AcquisitionDate" class="form-control" type="date" required
+                       max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="AcquisitionDate" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide a valid acquisition date (not in the future).</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="WriteOffDate" class="control-label">Write Off Date</label>
+                <input asp-for="WriteOffDate" class="form-control" type="date"
+                       min="@DateTime.Now.AddYears(-100).ToString("yyyy-MM-dd")"
+                       max="@DateTime.Now.AddYears(10).ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="WriteOffDate" class="text-danger"></span>
+                <small class="form-text text-muted">Optional, must be after acquisition date</small>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Is Available*</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" asp-for="IsAvailable" id="IsAvailableTrue" value="true" required>
+                        <label class="form-check-label" for="IsAvailableTrue">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" asp-for="IsAvailable" id="IsAvailableFalse" value="false">
+                        <label class="form-check-label" for="IsAvailableFalse">No</label>
+                    </div>
+                    <span asp-validation-for="IsAvailable" class="text-danger"></span>
+                    <div class="invalid-feedback">Please select availability status.</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Can Take Home*</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" asp-for="CanTakeHome" id="CanTakeHomeTrue" value="true" required>
+                        <label class="form-check-label" for="CanTakeHomeTrue">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" asp-for="CanTakeHome" id="CanTakeHomeFalse" value="false">
+                        <label class="form-check-label" for="CanTakeHomeFalse">No</label>
+                    </div>
+                    <span asp-validation-for="CanTakeHome" class="text-danger"></span>
+                    <div class="invalid-feedback">Please select if item can be taken home.</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LoanPeriodDays" class="control-label">Loan Period (Days)</label>
+                <input asp-for="LoanPeriodDays" class="form-control" min="1" max="365" />
+                <span asp-validation-for="LoanPeriodDays" class="text-danger"></span>
+                <small class="form-text text-muted">Number between 1 and 365</small>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Client-side validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+        // Date validation
+        document.getElementById('AcquisitionDate').addEventListener('change', function() {
+            var acquisitionDate = new Date(this.value);
+            var writeOffDateInput = document.getElementById('WriteOffDate');
+            var writeOffDate = new Date(writeOffDateInput.value);
+
+            if (writeOffDate && writeOffDate < acquisitionDate) {
+                writeOffDateInput.setCustomValidity('Write off date must be after acquisition date');
+            } else {
+                writeOffDateInput.setCustomValidity('');
+            }
+        });
+
+        document.getElementById('WriteOffDate').addEventListener('change', function() {
+            var writeOffDate = new Date(this.value);
+            var acquisitionDateInput = document.getElementById('AcquisitionDate');
+            var acquisitionDate = new Date(acquisitionDateInput.value);
+
+            if (acquisitionDate && writeOffDate && writeOffDate < acquisitionDate) {
+                this.setCustomValidity('Write off date must be after acquisition date');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    </script>
+}

@@ -1,0 +1,111 @@
+﻿@model KursDB.Models.EmployeeSchedule
+
+@{
+    ViewData["Title"] = "Edit Schedule";
+}
+
+<h1>Edit Schedule</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" class="needs-validation" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ScheduleId" />
+
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label">Employee*</label>
+                <select asp-for="EmployeeId" class="form-control" required
+                        asp-items="ViewBag.EmployeeId">
+                    <option value="">-- Select Employee --</option>
+                </select>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select an employee.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HallId" class="control-label">Hall*</label>
+                <select asp-for="HallId" class="form-control" required
+                        asp-items="ViewBag.HallId">
+                    <option value="">-- Select Hall --</option>
+                </select>
+                <span asp-validation-for="HallId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select a hall.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="WorkDate" class="control-label">Work Date*</label>
+                <input asp-for="WorkDate" class="form-control" type="date" required />
+                <span asp-validation-for="WorkDate" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide a work date.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StartTime" class="control-label">Start Time*</label>
+                <input asp-for="StartTime" class="form-control" type="time" required />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide a start time.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EndTime" class="control-label">End Time*</label>
+                <input asp-for="EndTime" class="form-control" type="time" required />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide an end time.</div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Client-side validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+        // Time validation
+        document.getElementById('StartTime').addEventListener('change', function() {
+            var startTime = this.value;
+            var endTimeInput = document.getElementById('EndTime');
+            var endTime = endTimeInput.value;
+
+            if (startTime && endTime && endTime <= startTime) {
+                endTimeInput.setCustomValidity('End time must be after start time');
+            } else {
+                endTimeInput.setCustomValidity('');
+            }
+        });
+
+        document.getElementById('EndTime').addEventListener('change', function() {
+            var endTime = this.value;
+            var startTimeInput = document.getElementById('StartTime');
+            var startTime = startTimeInput.value;
+
+            if (startTime && endTime && endTime <= startTime) {
+                this.setCustomValidity('End time must be after start time');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    </script>
+}

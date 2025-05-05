@@ -1,0 +1,141 @@
+﻿@model KursDB.Models.Loan
+
+@{
+    ViewData["Title"] = "Edit Loan";
+}
+
+<h1>Edit Loan</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" class="needs-validation" novalidate>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="LoanId" />
+
+            <div class="form-group">
+                <label asp-for="InventoryId" class="control-label">Inventory Item*</label>
+                <select asp-for="InventoryId" class="form-control" required
+                        asp-items="ViewBag.Inventories">
+                    <option value="">-- Select Inventory Item --</option>
+                </select>
+                <span asp-validation-for="InventoryId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select an inventory item.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ReaderId" class="control-label">Reader*</label>
+                <select asp-for="ReaderId" class="form-control" required
+                        asp-items="ViewBag.Readers">
+                    <option value="">-- Select Reader --</option>
+                </select>
+                <span asp-validation-for="ReaderId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select a reader.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label">Employee*</label>
+                <select asp-for="EmployeeId" class="form-control" required
+                        asp-items="ViewBag.Employees">
+                    <option value="">-- Select Employee --</option>
+                </select>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                <div class="invalid-feedback">Please select an employee.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LoanDate" class="control-label">Loan Date*</label>
+                <input asp-for="LoanDate" class="form-control" type="datetime-local" required />
+                <span asp-validation-for="LoanDate" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide a valid loan date.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DueDate" class="control-label">Due Date*</label>
+                <input asp-for="DueDate" class="form-control" type="datetime-local" required />
+                <span asp-validation-for="DueDate" class="text-danger"></span>
+                <div class="invalid-feedback">Please provide a valid due date.</div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ReturnDate" class="control-label">Return Date</label>
+                <input asp-for="ReturnDate" class="form-control" type="datetime-local" />
+                <span asp-validation-for="ReturnDate" class="text-danger"></span>
+                <small class="form-text text-muted">Optional, must be after loan date</small>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Client-side validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+        // Date validation
+        document.getElementById('LoanDate').addEventListener('change', function() {
+            var loanDate = new Date(this.value);
+            var dueDateInput = document.getElementById('DueDate');
+            var dueDate = new Date(dueDateInput.value);
+            var returnDateInput = document.getElementById('ReturnDate');
+            var returnDate = new Date(returnDateInput.value);
+
+            if (dueDate && dueDate < loanDate) {
+                dueDateInput.setCustomValidity('Due date must be after loan date');
+            } else {
+                dueDateInput.setCustomValidity('');
+            }
+
+            if (returnDate && returnDate < loanDate) {
+                returnDateInput.setCustomValidity('Return date must be after loan date');
+            } else {
+                returnDateInput.setCustomValidity('');
+            }
+        });
+
+        document.getElementById('DueDate').addEventListener('change', function() {
+            var dueDate = new Date(this.value);
+            var loanDateInput = document.getElementById('LoanDate');
+            var loanDate = new Date(loanDateInput.value);
+
+            if (loanDate && dueDate && dueDate < loanDate) {
+                this.setCustomValidity('Due date must be after loan date');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+
+        document.getElementById('ReturnDate').addEventListener('change', function() {
+            var returnDate = new Date(this.value);
+            var loanDateInput = document.getElementById('LoanDate');
+            var loanDate = new Date(loanDateInput.value);
+
+            if (loanDate && returnDate && returnDate < loanDate) {
+                this.setCustomValidity('Return date must be after loan date');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    </script>
+}

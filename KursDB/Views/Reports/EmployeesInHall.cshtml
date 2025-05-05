@@ -1,0 +1,74 @@
+﻿@using KursDB.Models.ViewModels
+@model List<EmployeeInHallViewModel>
+
+<h2>Библиотекари, работающие в указанном читальном зале</h2>
+
+<form asp-action="EmployeesInHallResult" method="post" onsubmit="return validateForm(this)">
+    <div class="form-group">
+        <label for="libraryName">Библиотека:</label>
+        <select class="form-control" id="libraryName" name="libraryName" required>
+            <option value="">Выберите библиотеку</option>
+            @foreach (var library in ViewBag.Libraries)
+            {
+                <option value="@library.Name">@library.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="hallNumber">Номер зала:</label>
+        <input type="number" class="form-control" id="hallNumber" name="hallNumber"
+               required min="1" max="100">
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
+
+<script>
+    function validateForm(form) {
+        const libraryName = form.libraryName.value;
+        const hallNumber = form.hallNumber.value;
+
+        if (!libraryName) {
+            alert('Выберите библиотеку');
+            return false;
+        }
+
+        if (!hallNumber || hallNumber < 1 || hallNumber > 100) {
+            alert('Номер зала должен быть от 1 до 100');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ФИО библиотекаря</th>
+                <th>Должность</th>
+                <th>Дата работы</th>
+                <th>Время начала</th>
+                <th>Время окончания</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.EmployeeName</td>
+                    <td>@item.PositionName</td>
+                    <td>@item.WorkDate.ToShortDateString()</td>
+                    <td>@item.StartTime.ToString(@"hh\:mm")</td>
+                    <td>@item.EndTime.ToString(@"hh\:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model != null)
+{
+    <p>Библиотекари в указанном читальном зале не найдены.</p>
+}
